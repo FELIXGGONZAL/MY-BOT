@@ -1,0 +1,33 @@
+name: BOT ESPIA - PERSONAS MIRANDO
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"  # Se lanza cada 5 minutos (máximo de GitHub)
+  workflow_dispatch:      # Para que puedas darle al botón cuando quieras
+
+jobs:
+  espionaje:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar codigo
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Instalar Navegador
+        run: |
+          pip install playwright
+          playwright install chromium
+
+      - name: Ejecutar Espionaje
+        # Asegúrate de que el archivo .py se llame bot_espia.py
+        run: python bot_espia.py
+
+      - name: Guardar Prueba
+        uses: actions/upload-artifact@v4
+        with:
+          name: reporte-visitas
+          path: captura_espia.png
