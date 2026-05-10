@@ -8,7 +8,7 @@ async def run():
         page = await browser.new_page()
         
         # --- AQUÍ PEGA TU URL ENTRE LAS COMILLAS ---
-        url = https://www.booking.com/hotel/es/marina-d-or-asequible-apartamento.es.html      
+        url = "https://www.booking.com/hotel/es/marina-d-or-asequible-apartamento.es.html"      
         # -------------------------------------------
 
         print(f"Abriendo: {url}")
