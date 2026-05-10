@@ -1,0 +1,30 @@
+name: Bot_Fotografo
+
+on:
+  workflow_dispatch: # Esto permite que tú le des al botón cuando quieras la foto
+
+jobs:
+  sacar_captura:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar codigo
+        uses: actions/checkout@v4
+
+      - name: Instalar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Instalar Navegador y Playwright
+        run: |
+          pip install playwright
+          playwright install chromium
+
+      - name: Ejecutar bot y sacar foto
+        run: python bot_foto.py
+
+      - name: Guardar la foto
+        uses: actions/upload-artifact@v4
+        with:
+          name: captura-del-apartamento
+          path: captura.png
