@@ -1,42 +1,33 @@
-import asyncio
-from playwright.async_api import async_playwright
+name: Bot_Espia_5min
 
-async def run():
-    async with async_playwright() as p:
-        browser = await p.chromium.launch(headless=True)
-        context = await browser.new_context(
-            user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
-            locale="es-ES"
-        )
-        page = await context.new_page()
-        
-        url = "https://www.booking.com/hotel/es/marina-d-or-asequible-apartamento.es.html"
-        
-        print(f"Abriendo: {url}")
-        await page.goto(url, wait_until="networkidle", timeout=60000)
-        await asyncio.sleep(7)
-        
-        print("--- BUSCANDO INFO DE VISITAS ---")
-        
-        try:
-            # Buscamos si hay gente mirando
-            visitas = await page.get_by_text("están mirando").all_text_contents()
-            # Buscamos si se ha reservado mucho
-            reservas = await page.get_by_text("veces reservado").all_text_contents()
-            
-            if visitas:
-                print(f"POPULARIDAD: {visitas[0]}")
-            if reservas:
-                print(f"RESERVAS RECIENTES: {reservas[0]}")
-            if not visitas and not reservas:
-                print("No hay carteles de visitas activos ahora mismo.")
-                
-        except Exception as e:
-            print(f"No se pudo leer la info: {e}")
+on:
+  workflow_dispatch: # Permite darle al botón manual si quieres
+  schedule:
+    - cron: "*/5 * * * *"  # <--- EJECUCIÓN AUTOMÁTICA CADA 5 MINUTOS
 
-        await page.screenshot(path="captura_espia.png", full_page=True)
-        print("--- PROCESO COMPLETADO ---")
-        await browser.close()
+jobs:
+  espionaje:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargando archivos
+        uses: actions/checkout@v4
 
-if __name__ == "__main__":
-    asyncio.run(run())
+      - name: Instalando Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Instalando Navegador y Playwright
+        run: |
+          pip install playwright
+          playwright install chromium
+
+      - name: Ejecutar Bot Espia
+        # Asegúrate de que tu archivo de Python se llame exactamente bot_espia.py
+        run: python bot_espia.py
+
+      - name: Guardar Captura
+        uses: actions/upload-artifact@v4
+        with:
+          name: reporte-espia-5min
+          path: captura_espia.png
