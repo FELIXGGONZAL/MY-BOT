@@ -1,30 +1,33 @@
-name: Bot_Fotografo
+name: Bot_Fotografo_5min
 
 on:
-  workflow_dispatch: # Esto permite que tú le des al botón cuando quieras la foto
+  workflow_dispatch: # Botón manual
+  schedule:
+    - cron: "*/5 * * * *"  # <--- EJECUCIÓN CADA 5 MINUTOS EXACTOS
 
 jobs:
-  sacar_captura:
+  captura:
     runs-on: ubuntu-latest
     steps:
       - name: Descargar codigo
         uses: actions/checkout@v4
 
-      - name: Instalar Python
+      - name: Configurar Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - name: Instalar Navegador y Playwright
+      - name: Instalar Playwright
         run: |
           pip install playwright
           playwright install chromium
 
-      - name: Ejecutar bot y sacar foto
-        run: python bot_foto.py
+      - name: Ejecutar el Bot
+        # ASEGÚRATE de que este nombre coincide con tu archivo .py (bot_foto.py o bot_foto_es.py)
+        run: python bot_foto.py 
 
-      - name: Guardar la foto
+      - name: Guardar la captura
         uses: actions/upload-artifact@v4
         with:
-          name: captura-del-apartamento
+          name: captura-5min
           path: captura.png
