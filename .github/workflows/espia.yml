@@ -1,23 +1,23 @@
 name: Bot_Cuarto_Espia
 
 on:
-  workflow_dispatch: # Botón manual
+  workflow_dispatch:
 
 jobs:
   espionaje:
     runs-on: ubuntu-latest
     steps:
-      - name: Descargando archivos
+      - name: Descargando codigo
         uses: actions/checkout@v4
 
-      - name: Configurando Python
+      - name: Instalando Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - name: Instalando Navegador
+      - name: Instalando librerias y Navegador
         run: |
-          pip install playwright
+          pip install playwright  # <--- Esta es la que suele faltar
           playwright install chromium
 
       - name: Ejecutar Bot Espia
