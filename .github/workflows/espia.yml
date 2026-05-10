@@ -1,0 +1,30 @@
+name: Bot_Cuarto_Espia
+
+on:
+  workflow_dispatch: # Botón manual
+
+jobs:
+  espionaje:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargando archivos
+        uses: actions/checkout@v4
+
+      - name: Configurando Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Instalando Navegador
+        run: |
+          pip install playwright
+          playwright install chromium
+
+      - name: Ejecutar Bot Espia
+        run: python bot_espia.py
+
+      - name: Guardar Captura
+        uses: actions/upload-artifact@v4
+        with:
+          name: reporte-espia
+          path: captura_espia.png
