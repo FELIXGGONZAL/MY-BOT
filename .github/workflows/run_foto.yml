@@ -2,7 +2,7 @@ name: FOTO DEL ANUNCIO (ESPAÑOL)
 
 on:
   schedule:
-    - cron: "*/5 17-21 * * 5,6,0" # Este lo ponemos cada 10 min para no saturar
+    - cron: "*/5 17-21 * * 0" # Este lo ponemos cada 10 min para no saturar
   workflow_dispatch:        # Para lanzarlo a mano
 
 jobs:
